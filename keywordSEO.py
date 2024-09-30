@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import font as tkfont
 from tkinter import ttk
+from tkinter import messagebox
 import random
 
 # config main value
@@ -482,22 +483,11 @@ def generate_random_string():
         tk.messagebox.showerror("Invalid input", "Please enter a valid number.")
 
 def copy_to_clipboard():
-    """Copies the selected text to the clipboard."""
-    # Clear the clipboard
-    root.clipboard_clear()
-    # Get the text from the entry widget
-    text = context_menu.get()
-    # Append the text to the clipboard
-    root.clipboard_append(text)
-    # Optional: Show a message that text is copied
-    status_label.config(text="Copied to clipboard!")
-
-    try:
-        selected_text = text_result.get(tk.SEL_FIRST, tk.SEL_LAST)
-        root.clipboard_clear()
-        root.clipboard_append(selected_text)
-    except tk.TclError:
-        pass  # No text selected
+    root.clipboard_clear() # Clear the clipboard
+    text = text_result.get("1.0", tk.END).strip()  # Get all text
+    if text:  # Check if there is text to copy
+        root.clipboard_append(text) # Append the text to the clipboard
+        messagebox.showinfo("Success", "Copied to clipboard!") # Show a message box to inform the user
 
 def show_context_menu(event):
     """Displays the right-click context menu."""
@@ -527,8 +517,9 @@ category_dropdown.pack(pady=5)
 # Create a checkbox to include or exclude fixed words
 include_fixed = tk.BooleanVar()
 include_fixed.set(False)  # Ensure the checkbox is not selected by default
+
 checkbox_fixed = tk.Checkbutton(root, text="Include fixed words", variable=include_fixed)
-checkbox_fixed.pack(pady=5)
+checkbox_fixed.pack(pady=10)
 
 # Create and place the button to generate the random string
 button_generate = tk.Button(root, text="Generate", command=generate_random_string, font=custom_font)
@@ -541,6 +532,14 @@ text_result.pack(pady=10)
 # Create a context menu for the text widget
 context_menu = tk.Menu(root, tearoff=0)
 context_menu.add_command(label="Copy", command=copy_to_clipboard)
+
+# Bind Ctrl+C to copy functionality
+def on_ctrl_c(event):
+    copy_to_clipboard()
+    return "break"  # Prevent default Ctrl+C action
+
+# Bind Ctrl+C to copy functionality
+root.bind('<Control-c>', on_ctrl_c)
 
 # Bind the right-click event to show the context menu
 text_result.bind("<Button-3>", show_context_menu)
