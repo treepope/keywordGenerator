@@ -1,4 +1,4 @@
-('D:\\gen_keyword\\build\\keywordSEO\\PYZ-00.pyz',
+('D:\\gen_keyword\\keywordGenerator\\build\\keywordSEO\\PYZ-00.pyz',
  [('_compat_pickle', 'C:\\Python37\\Lib\\_compat_pickle.py', 'PYMODULE'),
   ('_compression', 'C:\\Python37\\Lib\\_compression.py', 'PYMODULE'),
   ('_py_abc', 'C:\\Python37\\Lib\\_py_abc.py', 'PYMODULE'),
