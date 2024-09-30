@@ -483,6 +483,15 @@ def generate_random_string():
 
 def copy_to_clipboard():
     """Copies the selected text to the clipboard."""
+    # Clear the clipboard
+    root.clipboard_clear()
+    # Get the text from the entry widget
+    text = context_menu.get()
+    # Append the text to the clipboard
+    root.clipboard_append(text)
+    # Optional: Show a message that text is copied
+    status_label.config(text="Copied to clipboard!")
+
     try:
         selected_text = text_result.get(tk.SEL_FIRST, tk.SEL_LAST)
         root.clipboard_clear()
@@ -539,6 +548,10 @@ text_result.bind("<Button-3>", show_context_menu)
 # Create and place a label to show the length of the generated string
 label_length = tk.Label(root, text="Total length: 0", font=custom_font)
 label_length.pack(pady=5)
+
+# Create a status label
+status_label = tk.Label(root, text="")
+status_label.pack(pady=10)
 
 # Start the main event loop
 root.mainloop()
