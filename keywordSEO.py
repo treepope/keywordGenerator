@@ -483,15 +483,31 @@ def generate_random_string():
         tk.messagebox.showerror("Invalid input", "Please enter a valid number.")
 
 def copy_to_clipboard():
-    root.clipboard_clear() # Clear the clipboard
-    text = text_result.get("1.0", tk.END).strip()  # Get all text
-    if text:  # Check if there is text to copy
-        root.clipboard_append(text) # Append the text to the clipboard
-        messagebox.showinfo("Success", "Copied to clipboard!") # Show a message box to inform the user
+    """Copies the selected text to the clipboard."""
+    # Clear the clipboard
+    root.clipboard_clear()
+    # Get the text from the entry widget
+    text = context_menu.get()
+    # Append the text to the clipboard
+    root.clipboard_append(text)
+    # Optional: Show a message that text is copied
+    status_label.config(text="Copied to clipboard!")
 
+    try:
+        selected_text = text_result.get(tk.SEL_FIRST, tk.SEL_LAST)
+        root.clipboard_clear()
+        root.clipboard_append(selected_text)
+    except tk.TclError:
+        pass  # No text selected
+    
 def show_context_menu(event):
     """Displays the right-click context menu."""
     context_menu.post(event.x_root, event.y_root)
+
+# Bind Ctrl+C to copy functionality
+def on_ctrl_c(event):
+    copy_to_clipboard()
+    return "break"  # Prevent default Ctrl+C action
 
 # Create the main window
 root = tk.Tk()
@@ -533,15 +549,8 @@ text_result.pack(pady=10)
 context_menu = tk.Menu(root, tearoff=0)
 context_menu.add_command(label="Copy", command=copy_to_clipboard)
 
-# Bind Ctrl+C to copy functionality
-def on_ctrl_c(event):
-    copy_to_clipboard()
-    return "break"  # Prevent default Ctrl+C action
-
-# Bind Ctrl+C to copy functionality
-root.bind('<Control-c>', on_ctrl_c)
-
-# Bind the right-click event to show the context menu
+# Bind Ctrl+C, right-click to copy functionality the context menu
+text_result.bind('<Control-c>', on_ctrl_c)
 text_result.bind("<Button-3>", show_context_menu)
 
 # Create and place a label to show the length of the generated string
