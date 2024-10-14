@@ -483,23 +483,13 @@ def generate_random_string():
         tk.messagebox.showerror("Invalid input", "Please enter a valid number.")
 
 def copy_to_clipboard():
-    """Copies the selected text to the clipboard."""
-    # Clear the clipboard
-    root.clipboard_clear()
-    # Get the text from the entry widget
-    text = context_menu.get()
-    # Append the text to the clipboard
-    root.clipboard_append(text)
-    # Optional: Show a message that text is copied
-    status_label.config(text="Copied to clipboard!")
-
     try:
         selected_text = text_result.get(tk.SEL_FIRST, tk.SEL_LAST)
         root.clipboard_clear()
         root.clipboard_append(selected_text)
     except tk.TclError:
         pass  # No text selected
-    
+
 def show_context_menu(event):
     """Displays the right-click context menu."""
     context_menu.post(event.x_root, event.y_root)
